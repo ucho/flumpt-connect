@@ -1,0 +1,57 @@
+{
+  "name": "flumpt-connect",
+  "version": "0.0.0",
+  "description": "Connect function for flumpt",
+  "main": "lib/connect.js",
+  "homepage": "https://github.com/ucho/flumpt-connect",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ucho/flumpt-connect.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ucho/flumpt-connect/issues"
+  },
+  "author": "Daigo UCHIYAMA <daigo.uchiyama@gmail.com> (https://github.com/ucho)",
+  "license": "MIT",
+  "keywords": [
+    "react",
+    "flumpt"
+  ],
+  "scripts": {
+    "build": "rimraf lib && mkdirp lib && babel src --ignore *.test.js --out-dir lib",
+    "lint": "eslint src/**/*.js",
+    "prepublish": "npm run build",
+    "test": "npm run lint && ava"
+  },
+  "dependencies": {
+    "hoist-non-react-statics": "^1.2.0"
+  },
+  "devDependencies": {
+    "ava": "^0.18.1",
+    "babel-cli": "^6.22.2",
+    "babel-core": "^6.22.1",
+    "babel-eslint": "^7.1.1",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-react": "^6.22.0",
+    "babel-preset-stage-2": "^6.22.0",
+    "enzyme": "^2.7.1",
+    "eslint": "^3.15.0",
+    "eslint-plugin-react": "^6.9.0",
+    "flumpt": "^0.2.0",
+    "mkdirp": "^0.5.1",
+    "react": "^15.4.2",
+    "react-addons-test-utils": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "rimraf": "^2.5.4"
+  },
+  "peerDependencies": {
+    "flumpt": ">=0.0.1",
+    "react": ">=0.14.0"
+  },
+  "ava": {
+    "require": [
+      "babel-core/register"
+    ],
+    "babel": "inherit"
+  }
+}
