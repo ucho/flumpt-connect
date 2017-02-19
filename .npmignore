@@ -1,5 +1,7 @@
 src/
+*.log
 .babelrc
 .eslintrc
 .gitignore
+.travis.yml
 yarn.lock
