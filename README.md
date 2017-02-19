@@ -2,6 +2,8 @@ flumpt-connect
 ==============
 Connect function for flumpt
 
+[![Build Status](https://travis-ci.org/ucho/flumpt-connect.svg?branch=master)](https://travis-ci.org/ucho/flumpt-connect)
+
 Example
 -------
 
