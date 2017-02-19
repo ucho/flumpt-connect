@@ -5,6 +5,15 @@ Connect function for flumpt
 [![Build Status](https://travis-ci.org/ucho/flumpt-connect.svg?branch=master)](https://travis-ci.org/ucho/flumpt-connect)
 [![npm version](https://badge.fury.io/js/flumpt-connect.svg)](https://badge.fury.io/js/flumpt-connect)
 
+Installation
+------------
+
+required: react >= 0.14 and flumpt
+
+```
+$ npm install --save flumpt-connect
+```
+
 Example
 -------
 
