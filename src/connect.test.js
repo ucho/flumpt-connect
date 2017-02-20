@@ -116,14 +116,14 @@ test('Connected component receives state as it is if no mapStateToProps is given
 });
 
 test('Connected component receives merged props', (t) => {
-  const givenProps = { a: 'props', b: 'props', dispatch: 'props' };
-  const givenState = { b: 'state', dispatch: 'state' };
+  const givenState = { a: 'state', b: 'state', dispatch: 'state' };
+  const givenProps = { b: 'props', dispatch: 'props' };
   let rendered = false;
 
   const Original = ({ a, b, dispatch }) => {
     rendered = true;
-    t.is(a, 'props');
-    t.is(b, 'state');
+    t.is(a, 'state');
+    t.is(b, 'props');
     t.is(typeof dispatch, 'function');
     return <div />;
   };
