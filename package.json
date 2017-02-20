@@ -17,6 +17,12 @@
     "react",
     "flumpt"
   ],
+  "files": [
+    "lib",
+    "LICENSE",
+    "package.json",
+    "README.md"
+  ],
   "scripts": {
     "build": "rimraf lib && mkdirp lib && babel src --ignore *.test.js --out-dir lib",
     "lint": "eslint src/**/*.js",
