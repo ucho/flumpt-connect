@@ -40,7 +40,7 @@ Connects a React component to a Flumpt state. This function is referred to [reac
 
 #### Arguments
 
-* [`mapStateToProps(state): stateProps`] \(*Function*): It specifies a function that accepts the state of flumpt and returns Object. The result is passed as a props to the Component. If null or undefined is passed, the state is passed as is to the component.
+* [`mapStateToProps(state): stateProps`] \(*Function*): It specifies a function that accepts the state of flumpt and returns Object. The result is passed as a props to the Component. If null or undefined is passed, no props is passed from the state.
 
 LICENSE
 -------

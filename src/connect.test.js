@@ -86,14 +86,13 @@ test('Connected component can call dispatch', (t) => {
   t.true(called);
 });
 
-test('Connected component receives state as it is if no mapStateToProps is given', (t) => {
-  const givenState = { a: 1, b: 2, c: 3 };
+test('Connected component receives no props from state if no mapStateToProps is given', (t) => {
   let rendered = false;
 
   const Original = (props) => {
     rendered = true;
     t.is(typeof props.dispatch, 'function');
-    const expected = Object.assign({}, givenState, { dispatch: props.dispatch });
+    const expected = { dispatch: props.dispatch };
     t.deepEqual(props, expected);
     return <div />;
   };
@@ -107,7 +106,7 @@ test('Connected component receives state as it is if no mapStateToProps is given
 
   const app = new TestApp({
     renderer: (el) => render(el),
-    initialState: givenState,
+    initialState: { a: 1, b: 2 },
   });
 
   app.update((state) => state);
@@ -127,7 +126,7 @@ test('Connected component receives merged props', (t) => {
     t.is(typeof dispatch, 'function');
     return <div />;
   };
-  const Connected = connect()(Original);
+  const Connected = connect((state) => state)(Original);
 
   class TestApp extends Flux {
     render() {

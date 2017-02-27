@@ -7,7 +7,7 @@ function getDisplayName(component) {
 }
 
 export function connect(mapStateToProps) {
-  const mapToPropsFunc = mapStateToProps || ((state) => state);
+  const mapToPropsFunc = mapStateToProps || (() => ({}));
 
   return function connectHOC(WrappedComponent) {
     class Connect extends Component {
