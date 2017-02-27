@@ -20,7 +20,7 @@ export function connect(mapStateToProps) {
         const extraProps = { dispatch: this.dispatch };
         return React.createElement(
           WrappedComponent,
-          { ...stateProps, ...this.props, ...extraProps }
+          { ...this.props, ...stateProps, ...extraProps }
         );
       }
     }
