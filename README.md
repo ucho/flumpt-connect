@@ -1,6 +1,6 @@
 flumpt-connect
 ==============
-Connect function for flumpt
+Connect function for [mizchi/flumpt](https://github.com/mizchi/flumpt)
 
 [![Build Status](https://travis-ci.org/ucho/flumpt-connect.svg?branch=master)](https://travis-ci.org/ucho/flumpt-connect)
 [![npm version](https://badge.fury.io/js/flumpt-connect.svg)](https://badge.fury.io/js/flumpt-connect)
