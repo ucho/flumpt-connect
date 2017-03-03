@@ -6,7 +6,7 @@ import connect from './connect';
 
 /* eslint-disable react/prop-types */
 
-test('Connected component has modified properties', (t) => {
+test('properties', (t) => {
   class OriginalClass extends React.Component {
     render() {
       return <div />;
@@ -24,122 +24,104 @@ test('Connected component has modified properties', (t) => {
   t.is(ConnectedFunc.displayName, 'Connect(OriginalFunc)');
 });
 
-test('Connected component receives props modified by mapStateToProps', (t) => {
-  let rendered = false;
+const CALL = CALL;
 
-  const mapStateToProps = ({ passed, omitted }) => ({ passed }); // eslint-disable-line no-unused-vars
-  const Original = ({ passed, omitted }) => {
-    rendered = true;
-    t.is(passed, 'passed');
-    t.falsy(omitted);
-    return <div />;
-  };
-  const Connected = connect(mapStateToProps)(Original);
-
-  class TestApp extends Flux {
-    render() {
-      return <Connected />;
-    }
-  }
-
-  const app = new TestApp({
-    renderer: (el) => render(el),
-    initialState: {
-      passed: 'passed',
-      omitted: 'omitted',
-    },
-  });
-
-  app.update((state) => state);
-
-  t.true(rendered);
-});
-
-test('Connected component can call dispatch', (t) => {
-  const Original = ({ dispatch }) => {
-    t.is(typeof dispatch, 'function');
-    dispatch('call');
-    return <div />;
-  };
-  const Connected = connect()(Original);
+function doTest({
+  t,
+  Original,
+  initialState,
+  mapStateToProps,
+  mapDispatchToProps,
+  ownProps,
+  func = () => {}
+}) {
+  const Connected = connect(mapStateToProps, mapDispatchToProps)(Original);
 
   let called = false;
 
   class TestApp extends Flux {
     subscribe() {
-      this.on('call', () => {
+      this.on(CALL, (...args) => {
         called = true;
+        func(...args);
       });
     }
     render() {
-      return <Connected />;
+      return <Connected { ...ownProps } />;
     }
   }
 
   const app = new TestApp({
     renderer: (el) => render(el),
-    initialState: {},
+    initialState
   });
 
   app.update((state) => state);
 
   t.true(called);
-});
+}
 
-test('Connected component receives no props from state if no mapStateToProps is given', (t) => {
-  let rendered = false;
-
+test('no params: receives only dispatch', (t) => {
   const Original = (props) => {
-    rendered = true;
     t.is(typeof props.dispatch, 'function');
+    props.dispatch(CALL);
     const expected = { dispatch: props.dispatch };
     t.deepEqual(props, expected);
     return <div />;
   };
-  const Connected = connect()(Original);
-
-  class TestApp extends Flux {
-    render() {
-      return <Connected />;
-    }
-  }
-
-  const app = new TestApp({
-    renderer: (el) => render(el),
-    initialState: { a: 1, b: 2 },
-  });
-
-  app.update((state) => state);
-
-  t.true(rendered);
+  doTest({ t, Original });
 });
 
-test('Connected component receives merged props', (t) => {
-  const givenProps = { a: 'props', b: 'props', dispatch: 'props' };
-  const givenState = { b: 'state', dispatch: 'state' };
-  let rendered = false;
-
-  const Original = ({ a, b, dispatch }) => {
-    rendered = true;
-    t.is(a, 'props');
-    t.is(b, 'state');
-    t.is(typeof dispatch, 'function');
+test('give mapStateToProps: receives mapped state and dispatch', (t) => {
+  const initialState = {
+    passed: 'passed',
+    omitted: 'omitted'
+  };
+  const mapStateToProps = ({ passed, omitted }) => ({ passed }); // eslint-disable-line no-unused-vars
+  const Original = (props) => {
+    t.is(props.passed, 'passed');
+    t.falsy(props.omitted);
+    t.is(typeof props.dispatch, 'function');
+    props.dispatch(CALL);
     return <div />;
   };
-  const Connected = connect((state) => state)(Original);
+  doTest({ t, initialState, mapStateToProps, Original });
+});
 
-  class TestApp extends Flux {
-    render() {
-      return <Connected { ...givenProps } />;
-    }
+test('give mapDispatchToProps: receives no state, dispatch props and no dispatch', (t) => {
+  const initialState = { omitted: 'omitted' };
+  const mapDispatchToProps = (dispatch) => ({ setMessage: (msg) => dispatch(CALL, msg) });
+
+  let message = '';
+  const func = (msg) => {
+    message = msg;
   }
+  const expectedMessage = 'hoge';
 
-  const app = new TestApp({
-    renderer: (el) => render(el),
-    initialState: givenState,
-  });
+  const Original = (props) => {
+    t.falsy(props.omitted);
+    t.is(typeof props.setMessage, 'function');
+    props.setMessage(expectedMessage);
+    t.falsy(props.dispatch);
+    return <div />;
+  };
 
-  app.update((state) => state);
+  doTest({ t, initialState, mapDispatchToProps, Original, func });
 
-  t.true(rendered);
+  t.is(message, expectedMessage);
+});
+
+test('give mapStateToProps and mapDispatchToProps: receives merged props', (t) => {
+  const ownProps = { a: 'props', b: 'props', c: 'props' };
+  const initialState = { b: 'state', c: 'state' };
+  const mapStateToProps = (state) => state;
+  const mapDispatchToProps = (dispatch) => ({ c: dispatch });
+  const Original = ({ a, b, c }) => {
+    t.is(a, 'props');
+    t.is(b, 'state');
+    t.is(typeof c, 'function');
+    c(CALL);
+    return <div />;
+  };
+  doTest({ t, ownProps, initialState, mapStateToProps, mapDispatchToProps, Original });
 });

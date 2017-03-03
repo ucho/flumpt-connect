@@ -6,8 +6,9 @@ function getDisplayName(component) {
   return component.displayName || component.name || 'Component';
 }
 
-export function connect(mapStateToProps) {
-  const mapToPropsFunc = mapStateToProps || (() => ({}));
+export function connect(mapStateToProps, mapDispatchToProps) {
+  const mapStateToPropsFunc = mapStateToProps || (() => ({}));
+  const mapDispatchToPropsFunc = mapDispatchToProps || ((dispatch) => ({ dispatch }));
 
   return function connectHOC(WrappedComponent) {
     class Connect extends Component {
@@ -16,11 +17,11 @@ export function connect(mapStateToProps) {
         this.dispatch = this.dispatch.bind(this);
       }
       render() {
-        const stateProps = mapToPropsFunc(this.context.emitter.state);
-        const extraProps = { dispatch: this.dispatch };
+        const stateProps = mapStateToPropsFunc(this.context.emitter.state);
+        const dispatchProps = mapDispatchToPropsFunc(this.dispatch);
         return React.createElement(
           WrappedComponent,
-          { ...this.props, ...stateProps, ...extraProps }
+          { ...this.props, ...stateProps, ...dispatchProps }
         );
       }
     }

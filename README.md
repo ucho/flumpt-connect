@@ -21,26 +21,31 @@ Example
 import React from 'react';
 import connect from 'flumpt-connect';
 
-const MyComponent = ({ count, dispatch }) => (
+const MyComponent = ({ count, increment }) => (
   <div>
     {count}
-    <button onClick={() => dispatch('increment')}>increment</button>
+    <button onClick={increment}>increment</button>
   </div>
 );
 
-export default connect(({ count }) => ({ count }))(MyComponent);
+export default connect(
+  ({ count }) => ({ count }),
+  dispatch => ({ increment: () => dispatch('increment') })
+)(MyComponent);
 ```
 
 API
 ------
 
-### `connect([mapStateToProps])`
+### `connect([mapStateToProps], [mapDispatchToProps])`
 
-Connects a React component to a Flumpt state. This function is referred to [react-redux](https://github.com/reactjs/react-redux)'s same name. Connected component receives the `dispatch` function of flumpt as a props.
+Connects a React component to a Flumpt state. This function is referred to [react-redux](https://github.com/reactjs/react-redux)'s same name.
 
 #### Arguments
 
 * [`mapStateToProps(state): stateProps`] \(*Function*): It specifies a function that accepts the state of flumpt and returns Object. The result is passed as a props to the Component. If null or undefined is passed, no props is passed from the state.
+
+* [`mapDispatchToProps(dispatch): dispatchProps`] \(*Function*): It specifies a function that accepts the dispatch function of flumpt and returns Object. The result is pased as a props to the Component. If null or undefined is passed, the dispatch function is passed as it is.
 
 LICENSE
 -------
