@@ -6,9 +6,28 @@ function getDisplayName(component) {
   return component.displayName || component.name || 'Component';
 }
 
+function createMapDispatchToPropsFunc(mapDispatchToProps) {
+  if (!mapDispatchToProps) {
+    return dispatch => ({ dispatch });
+  }
+  switch (typeof mapDispatchToProps) {
+    case 'function':
+      return mapDispatchToProps;
+    case 'object':
+      return dispatch => (
+        Object.keys(mapDispatchToProps).reduce((props, key) => {
+          const eventName = mapDispatchToProps[key];
+          props[key] = (...args) => dispatch(eventName, ...args);
+          return props;
+        }, {}));
+    default:
+      throw new Error(`unexpected type of mapDispatchToProps: ${typeof mapDispatchToProps}`);
+  }
+}
+
 export function connect(mapStateToProps, mapDispatchToProps) {
   const mapStateToPropsFunc = mapStateToProps || (() => ({}));
-  const mapDispatchToPropsFunc = mapDispatchToProps || ((dispatch) => ({ dispatch }));
+  const mapDispatchToPropsFunc = createMapDispatchToPropsFunc(mapDispatchToProps);
 
   return function connectHOC(WrappedComponent) {
     class Connect extends Component {

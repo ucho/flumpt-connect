@@ -88,7 +88,7 @@ test('give mapStateToProps: receives mapped state and dispatch', (t) => {
   doTest({ t, initialState, mapStateToProps, Original });
 });
 
-test('give mapDispatchToProps: receives no state, dispatch props and no dispatch', (t) => {
+test('give a function to mapDispatchToProps: receives no state, dispatch props and no dispatch', (t) => {
   const initialState = { omitted: 'omitted' };
   const mapDispatchToProps = (dispatch) => ({ setMessage: (msg) => dispatch(CALL, msg) });
 
@@ -109,6 +109,33 @@ test('give mapDispatchToProps: receives no state, dispatch props and no dispatch
   doTest({ t, initialState, mapDispatchToProps, Original, func });
 
   t.is(message, expectedMessage);
+});
+
+test('give a object to mapDispatchToProps: receives no state, dispatch props and no dispatch', (t) => {
+  const initialState = { omitted: 'omitted' };
+  const mapDispatchToProps = { setMessage: CALL }
+
+  let message = '';
+  const func = (msg) => {
+    message = msg;
+  }
+  const expectedMessage = 'hoge';
+
+  const Original = (props) => {
+    t.falsy(props.omitted);
+    t.is(typeof props.setMessage, 'function');
+    props.setMessage(expectedMessage);
+    t.falsy(props.dispatch);
+    return <div />;
+  };
+
+  doTest({ t, initialState, mapDispatchToProps, Original, func });
+
+  t.is(message, expectedMessage);
+});
+
+test('give an unexpected value to mapDispatchToProps: Error is thrown', (t) => {
+  t.throws(() => connect(null, 1));
 });
 
 test('give mapStateToProps and mapDispatchToProps: receives merged props', (t) => {

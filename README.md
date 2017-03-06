@@ -30,7 +30,7 @@ const MyComponent = ({ count, increment }) => (
 
 export default connect(
   ({ count }) => ({ count }),
-  dispatch => ({ increment: () => dispatch('increment') })
+  { increment: 'increment' }
 )(MyComponent);
 ```
 
@@ -45,7 +45,10 @@ Connects a React component to a Flumpt state. This function is referred to [reac
 
 * [`mapStateToProps(state): stateProps`] \(*Function*): It specifies a function that accepts the state of flumpt and returns Object. The result is passed as a props to the Component. If null or undefined is passed, no props is passed from the state.
 
-* [`mapDispatchToProps(dispatch): dispatchProps`] \(*Function*): It specifies a function that accepts the dispatch function of flumpt and returns Object. The result is pased as a props to the Component. If null or undefined is passed, the dispatch function is passed as it is.
+* [`mapDispatchToProps(dispatch): dispatchProps`] \(*Object or Function*):
+  * Object case: Its key is used as a key of props, and the paired value is used as an event name for EventEmitter. The new component receives a props: the key is as it is, and the paired value is a function that calls the dispatch function with the specieifed event name.
+  * Function case: The specified function accepts the dispatch function of flumpt and returns Object. The result is passed as a props to the new component.
+  * Not spefied case: If null or undefined is passed, the dispatch function is passed to the new component as it is.
 
 LICENSE
 -------
