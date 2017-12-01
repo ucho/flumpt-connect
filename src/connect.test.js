@@ -1,8 +1,11 @@
 import test from 'ava';
 import React from 'react';
 import { Flux } from 'flumpt';
-import { render } from 'enzyme';
+import { configure, render } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-15';
 import connect from './connect';
+
+configure({ adapter: new Adapter() });
 
 /* eslint-disable react/prop-types */
 

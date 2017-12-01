@@ -36,7 +36,7 @@ export function connect(mapStateToProps, mapDispatchToProps) {
         this.dispatch = this.dispatch.bind(this);
       }
       render() {
-        const stateProps = mapStateToPropsFunc(this.context.emitter.state);
+        const stateProps = mapStateToPropsFunc(this.context.rootProps.emitter.state);
         const dispatchProps = mapDispatchToPropsFunc(this.dispatch);
         return React.createElement(
           WrappedComponent,

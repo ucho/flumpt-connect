@@ -8,8 +8,6 @@ Connect function for [mizchi/flumpt](https://github.com/mizchi/flumpt)
 Installation
 ------------
 
-required: react >= 0.14 and flumpt
-
 ```
 $ npm install --save flumpt-connect
 ```
