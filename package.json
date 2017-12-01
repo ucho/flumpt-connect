@@ -1,6 +1,6 @@
 {
   "name": "flumpt-connect",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "description": "Connect function for mizchi/flumpt",
   "main": "lib/connect.js",
   "homepage": "https://github.com/ucho/flumpt-connect",
